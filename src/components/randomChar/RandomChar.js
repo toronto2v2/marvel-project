@@ -27,8 +27,6 @@ class RandomChar extends Component{
     }
     render(){
         const {char: {name, description,thumbnail,homepage,wiki}} = this.state;
-        // const modyfiedDescr = description.length > 226 ?
-        //        description.slice(0, 226).concat('...') : description
         return (
             <div className="randomchar">
                 <div className="randomchar__block">
