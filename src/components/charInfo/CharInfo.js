@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
@@ -106,7 +105,7 @@ const View = ({char}) => {
 
 const ComicsList = ({comics}) => {
     return comics.map((item,i) => {
-        if(i > 9) return
+        if(i > 9) return null
 
         return(
             
@@ -115,6 +114,8 @@ const ComicsList = ({comics}) => {
             </li>
         )
     })
+
+   
 }
 
 export default CharInfo;
