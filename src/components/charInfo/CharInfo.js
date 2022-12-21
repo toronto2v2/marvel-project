@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types'; // ES6
 import './charInfo.scss';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
@@ -118,4 +119,7 @@ const ComicsList = ({comics}) => {
    
 }
 
+CharInfo.propTypes = {
+    charId: PropTypes.func,
+}
 export default CharInfo;
