@@ -18,6 +18,17 @@ class CharList extends Component{
         charEnded: false,
     }
 
+    listItemActive = [];
+
+    setListItemActive = el => {
+        this.listItemActive = [...this.listItemActive, el];
+    }
+
+    activateListItem = (i) => {
+        this.listItemActive.map(item => item.className = 'char__item')
+        this.listItemActive[i].classList.add('char__item_selected');
+      };
+
     marvelService = new MarvelService();
     
     onRequest = (offset) => {
@@ -66,7 +77,7 @@ class CharList extends Component{
         
         const spinner = loading ? <Spinner/> : null;
         const errorMessage = error ? <ErrorMessage/> : null;
-        const content = !(loading || error) ?  <View characters={characters} onCharSelected = {onCharSelected}/> : null ;
+        const content = !(loading || error) ?  <View characters={characters} onCharSelected = {onCharSelected} activateListItem = {this.activateListItem} setListItemActive = {this.setListItemActive}/> : null ;
 
 
         let buttonStyle = newItemLoading ? {filter: 'grayscale(1)'} : {};
@@ -90,14 +101,16 @@ class CharList extends Component{
     }
 }
 
-const View = ({characters, onCharSelected}) => {
+const View = ({characters, onCharSelected, activateListItem,setListItemActive}) => {
     const reg = /image_not_available/g;
     
-    const res = characters.map(item => {
+    const res = characters.map((item,i) => {
         return (
             <li className="char__item"
+                ref={setListItemActive}
+                tabIndex={0}
                 key = {item.id}
-                onClick = {() => onCharSelected(item.id)}>
+                onClick = {() => {onCharSelected(item.id); activateListItem(i)}}>
                 <img src={item.thumbnail} 
                      style = {reg.test(item.thumbnail) ? {objectFit:'contain'} : null}  
                      alt={item.name}/>
