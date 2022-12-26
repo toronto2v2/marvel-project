@@ -1,5 +1,5 @@
 import './charList.scss';
-import {Component} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types'; // ES6
 
 import MarvelService from '../../services/MarvelService';
@@ -7,110 +7,105 @@ import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 
  
-class CharList extends Component{
+const CharList = (props) => {
+    const [characters, setCharacters] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [offset, setOffset] = useState(210);
+    const [charEnded, setCharEnded] = useState(false);
 
-    state = {
-        characters: [],
-        loading: true,
-        error: false,
-        newItemLoading: false,
-        offset: 210,
-        charEnded: false,
-    }
+    const marvelService = new MarvelService();
 
-    listItemActive = [];
+    useEffect(() => {
+        onRequest();
+    }, [])
 
-    setListItemActive = el => {
-        this.listItemActive = [...this.listItemActive, el];
-    }
+    const listItemActive = useRef([]);
 
-    activateListItem = (i) => {
-        this.listItemActive.map(item => item.className = 'char__item')
-        this.listItemActive[i].classList.add('char__item_selected');
+    const activateListItem = (event ,i) => {
+        if(event.key === 'Enter' || event.type === 'click'){
+            listItemActive.current.map(item => item.className = 'char__item')
+            listItemActive.current[i].classList.add('char__item_selected');
+        }
+
       };
 
-    marvelService = new MarvelService();
     
-    onRequest = (offset) => {
-        this.onCharlistLoading();
-        this.marvelService
+    const onRequest = (offset) => {
+        onCharlistLoading();
+        marvelService
         .getAllCharacters(offset)
-        .then(this.onCharactersLoaded)
-        .catch(this.onCharactersError)
+        .then(onCharactersLoaded)
+        .catch(onCharactersError)
     }
     
-    onCharlistLoading = () => {
-        this.setState({
-            newItemLoading: true,
-        })
+    const onCharlistLoading = () => {
+        setNewItemLoading(true)
     }
 
-    componentDidMount(){
-        this.onRequest();
-    }
-
-    onCharactersLoaded = (newCharacters) =>{
+    const onCharactersLoaded = (newCharacters) =>{
         let ended = false;
         if(newCharacters.length < 9){
             ended = true;
         }
 
-        this.setState(({characters, offset}) => ({
-            characters: [...characters, ...newCharacters],
-            loading: false, 
-            error: false, 
-            newItemLoading: false,
-            offset: offset + 9,
-            charEnded: ended,
-
-        }))
+        setCharacters(() => [...characters, ...newCharacters]);
+        setLoading( loading => false);
+        setError(error => false);
+        setNewItemLoading(newItemLoading => false);
+        setOffset(offset => offset + 9);
+        setCharEnded(charEnded => ended);
     }
 
-    onCharactersError = () => {
-        this.setState({loading: false, error: true})
+    const onCharactersError = () => {
+        setLoading( loading => false);
+        setError(true);
     }
 
-
-    render() {
-        const {characters, loading, error,newItemLoading, offset, charEnded} = this.state;
-        const {onCharSelected} = this.props;
-        
-        const spinner = loading ? <Spinner/> : null;
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const content = !(loading || error) ?  <View characters={characters} onCharSelected = {onCharSelected} activateListItem = {this.activateListItem} setListItemActive = {this.setListItemActive}/> : null ;
-
-
-        let buttonStyle = newItemLoading ? {filter: 'grayscale(1)'} : {};
-        charEnded ? buttonStyle.display = 'none': buttonStyle.display = 'block';
+    
+    const spinner = loading ? <Spinner/> : null;
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const content = !(loading || error) ?  
+            <View characters={characters} 
+                  onCharSelected = {props.onCharSelected} 
+                  activateListItem = {activateListItem} 
+                  listItemActive = {listItemActive}/> 
+            : null ;
 
 
-        return (
-            <div className="char__list">
-                    {spinner}
-                    {errorMessage}
-                    {content}
-                <button 
-                    className="button button__main button__long"
-                    disabled = {newItemLoading}
-                    onClick = {() => this.onRequest(offset)}
-                    style = {buttonStyle}>
-                    <div className="inner">load more</div>
-                </button>
-            </div>
-        )
-    }
+    let buttonStyle = newItemLoading ? {filter: 'grayscale(1)'} : {};
+    charEnded ? buttonStyle.display = 'none': buttonStyle.display = 'block';
+
+
+    return (
+        <div className="char__list">
+                {spinner}
+                {errorMessage}
+                {content}
+            <button 
+                className="button button__main button__long"
+                disabled = {newItemLoading}
+                onClick = {() => onRequest(offset)}
+                style = {buttonStyle}>
+                <div className="inner">load more</div>
+            </button>
+        </div>
+    )
+    
 }
 
-const View = ({characters, onCharSelected, activateListItem,setListItemActive}) => {
+const View = ({characters, onCharSelected, activateListItem,listItemActive}) => {
     const reg = /image_not_available/g;
     
     const res = characters.map((item,i) => {
         return (
             <li className="char__item"
-                ref={setListItemActive}
+                ref={el => listItemActive.current[i] = el}
                 tabIndex={0}
                 key = {item.id}
-                onClick = {() => {onCharSelected(item.id); activateListItem(i)}}>
+                onKeyDown = {(e) => {onCharSelected(item.id);activateListItem(e,i)}}
+                onClick = {(e) => {onCharSelected(item.id);activateListItem(e,i)}}>
                 <img src={item.thumbnail} 
                      style = {reg.test(item.thumbnail) ? {objectFit:'contain'} : null}  
                      alt={item.name}/>
