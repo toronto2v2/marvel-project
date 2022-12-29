@@ -35,12 +35,11 @@ const useMarvelService = () => {
 
 
     const _transformComics = (comics) => {
-        console.log(comics);
         return comics.map(item => {
             return {
                 id: item.id,
                 title: item.title,
-                price: item.prices[0].price,
+                price: item.prices[0].price ? item.prices[0].price + '$' : 'NOT AVAILABLE',
                 thumbnail: item.thumbnail.path + '.' + item.thumbnail.extension,
                 link: item.urls[0].url,
             }
