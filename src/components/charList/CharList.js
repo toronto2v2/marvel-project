@@ -86,7 +86,7 @@ const View = ({characters, onCharSelected, activateListItem,listItemActive}) => 
                 tabIndex={0}
                 key = {item.id}
                 onKeyDown = {(e) => {activateListItem(e, i, item.id)}}
-                onClick = {(e) => {onCharSelected(item.id);activateListItem(e,i)}}>
+                onClick = {(e) => {onCharSelected(item.id);activateListItem(e,i,item.id)}}>
                 <img src={item.thumbnail} 
                      style = {reg.test(item.thumbnail) ? {objectFit:'contain'} : null}  
                      alt={item.name}/>
