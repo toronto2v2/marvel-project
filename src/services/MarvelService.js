@@ -9,17 +9,15 @@ const useMarvelService = () => {
     const _apiKey = 'apikey=3f78486c01f84cbc8db5c4360de52f37';
     const _baseOffset = 210;
 
-    // getResourse = async (url) => {
-    //     let res = await fetch(url);
-    //     if(!res.ok){
-    //         throw new Error(`Could not fetch ${url} status: ${res.status}`)
-    //     }
-    //     return await res.json();
-
-    // }
+    
     const getAllComics = async (offset) => {
         const res = await request(`${_apiBase}comics?limit=8&offset=${offset}&${_apiKey}`)
-        return _transformComics(res.data.results)
+        return res.data.results.map(_transformComics);
+    }
+
+    const getSingleComic = async (id) => {
+        const res = await request(`${_apiBase}comics/${id}?${_apiKey}`)
+        return _transformComics(res.data.results[0])
     }
 
     const getAllCharacters = async(offset = _baseOffset) => {
@@ -35,15 +33,15 @@ const useMarvelService = () => {
 
 
     const _transformComics = (comics) => {
-        return comics.map(item => {
-            return {
-                id: item.id,
-                title: item.title,
-                price: item.prices[0].price ? item.prices[0].price + '$' : 'NOT AVAILABLE',
-                thumbnail: item.thumbnail.path + '.' + item.thumbnail.extension,
-                link: item.urls[0].url,
-            }
-        })
+        return {
+            id: comics.id,
+            title: comics.title,
+            price: comics.prices[0].price ? comics.prices[0].price + '$' : 'NOT AVAILABLE',
+            thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+            pageCount: comics.pageCount ? comics.pageCount + ' pages' : 'No any data about pages quantity',
+            description: comics.description ? comics.description : 'Description are not available',
+            language: comics.textObjects[1] ? comics.textObjects[1].language : 'No data about langeages'
+        }
     }
 
     const _transformCharacter = (char) => {
@@ -58,7 +56,7 @@ const useMarvelService = () => {
         }
     }
 
-    return{loading, error, getAllCharacters, getCharacter, clearError, getAllComics}
+    return{loading, error, getAllCharacters, getCharacter, clearError, getAllComics,getSingleComic}
 }
 
 export default useMarvelService;

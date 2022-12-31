@@ -1,6 +1,7 @@
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom' 
+
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom' 
 import AppHeader from "../appHeader/AppHeader";
-import {MainPage, ComicsPage} from '../pages'
+import {MainPage, ComicsPage, Page404,SingleComicPage} from '../pages'
 
 const App = () => {
 
@@ -10,15 +11,13 @@ const App = () => {
             <div className="app">
                 <AppHeader/>
                 <main>
-                    <Switch>
-                        <Route exact path='/'>
-                            <MainPage/>
-                        </Route>
+                    <Routes>
+                        <Route path='/' element={<MainPage/>}/>
+                        <Route path='/comics' element = {<ComicsPage/>}/>
+                        <Route path='/comics/:comicId' element = {<SingleComicPage/>}/>
+                        <Route path = '*' element ={<Page404 backToWhat = 'main page' to = '/'/>}/>
 
-                        <Route exact path='/comics'>
-                            <ComicsPage/>
-                        </Route>
-                    </Switch>
+                    </Routes>
                 </main>
             </div>
         </Router>
