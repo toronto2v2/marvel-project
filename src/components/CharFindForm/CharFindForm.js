@@ -32,14 +32,13 @@ const CharFindForm = () => {
                             : 
                             <div className="validation__wrapper-success">
                                 <div className="succes__text">There is! Visit {char[0].name} page?</div>
-                                <button 
-                                    className="button button__main button__main_gray">
-                                    <div className="inner">find</div>
-                                </button>
+                                <Link to={`/character/${char[0].id}`}>
+                                    <button 
+                                        className="button button__main button__main_gray">
+                                        <div className="inner">to page</div>
+                                    </button>
+                                </Link>
                             </div>;
-
-
-
     return(
         <Formik 
         initialValues={{ charName: ''}}

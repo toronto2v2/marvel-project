@@ -137,4 +137,4 @@ CharList.propTypes = {
     onCharSelected: PropTypes.func.isRequired,
 }
 
-export default CharList;
+export default CharList; 

@@ -1,0 +1,31 @@
+
+.single-char {
+    margin-top: 50px;
+    display: grid;
+    grid-template-columns: 293px 550px auto;
+    column-gap: 50px;
+    align-items: start;
+}
+.single-char__img{
+    width: 293px;
+    height: 450px;
+}
+.single-char__name{
+    font-weight: bold;
+    font-size: 22px;
+    line-height: 29px;
+}
+.single-char__descr{
+    font-size: 18px;
+    line-height: 24px;
+    margin-top: 25px;
+}
+.single-char__back{
+    justify-self: end;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+}
+.single-char__back:hover{
+    color: #9F0013;
+}
