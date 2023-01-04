@@ -1,0 +1,81 @@
+.char-search-form{
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+    position: relative;
+    z-index: 5;
+    background-color: #fff;
+}
+
+.char-search-form label{
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    color: #000;
+}
+.input__field{
+    display: block;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    color: #000;
+}
+.inner__wrapper{
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.input__field{
+    padding: 0 10px;
+    width: 250px;
+    height: 38px;
+    border: none;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 14px;
+}
+
+
+.errorValidate{
+    color: #9F0013;
+    font-weight: 700;
+    font-size: 20px;
+}
+.validation__wrapper-error{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.validation__wrapper-success{
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+.succes__text{
+    color: green;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+button.button__main.button__main_gray .inner{
+    background-color: gray;
+}
+
+.button.button__main.button__main_gray::after,
+.button.button__main.button__main_gray::before{
+    background-color: gray;
+}
+.button.button__main.button__main_gray .inner::after,.button.button__main.button__main_gray .inner::before{
+    border-color: gray transparent;
+}
+.charNotFound{
+    color: #9F0013;
+    font-weight: 700;
+    font-size: 20px;
+}

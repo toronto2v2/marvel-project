@@ -41,7 +41,11 @@ const useMarvelService = () => {
             string = `${_apiBase}characters?name=${name.replace(/ /g, '%20')}&${_apiKey}`
         }
         const res = await request(string);
-        return _transformCharacter(res.data.results[0])
+        if (!res.data.results[0]){
+            return [];
+        }else{
+            return [_transformCharacter(res.data.results[0])]
+        }
     }
 
 

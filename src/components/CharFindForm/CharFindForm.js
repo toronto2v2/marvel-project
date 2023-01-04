@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Formik, Field, Form , ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 import useMarvelService from "../../services/MarvelService";
-import Spinner from '../spinner/spinner';
+import { Link } from "react-router-dom";
 
-
-import './CharFindForm.css'
+import './CharFindForm.css';
 
 
 
 const CharFindForm = () => {
     const [char, setChar] = useState(null);
-    const {loading,error,getCharacterByName, clearError} = useMarvelService();
+    const {loading, error, getCharacterByName, clearError} = useMarvelService();
 
     const updateChar = (name) => {
         clearError();
@@ -23,6 +22,24 @@ const CharFindForm = () => {
     const onCharLoaded = (char) => {
         setChar(char)
     }   
+
+
+
+    const notFound = Array.isArray(char) && char.length === 0  ? <div className="charNotFound">The character was not found. Check the name and try again</div> : null;
+    const firsView = !char || char.length === 0? <div className="validation__wrapper-error">
+                                <ErrorMessage name="charName" component='div' className="errorValidate"/>
+                            </div> 
+                            : 
+                            <div className="validation__wrapper-success">
+                                <div className="succes__text">There is! Visit {char[0].name} page?</div>
+                                <button 
+                                    className="button button__main button__main_gray">
+                                    <div className="inner">find</div>
+                                </button>
+                            </div>;
+
+
+
     return(
         <Formik 
         initialValues={{ charName: ''}}
@@ -31,12 +48,19 @@ const CharFindForm = () => {
           })}
         onSubmit={({charName}) => updateChar(charName)}>
 
-        <Form>
-            <label htmlFor="charName">enter name</label>
-            <Field name="charName" type="text" />
-            <ErrorMessage name="charName"/>
-    
-            <button className="submit__btn" type="submit">Submit</button>
+        <Form className="char-search-form" onChange={e => e.target.value ? setChar(null) : null}>
+            <label htmlFor="charName">Or find character by name</label>
+            <div className="inner__wrapper">
+                <Field name="charName" type="text" className='input__field' placeholder="Enter name"/>
+                <button 
+                    type='submit' 
+                    className="button button__main"
+                    disabled={loading}>
+                    <div className="inner">find</div>
+                </button>
+            </div>
+            {firsView}
+            {notFound}
        </Form>
         
         </Formik>
