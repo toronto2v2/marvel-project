@@ -5,6 +5,7 @@ import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 import Skeleton from '../skeleton/Skeleton';
+import CharFindForm from '../CharFindForm/CharFindForm';
 
 
 function CharInfo (props) {
@@ -41,12 +42,17 @@ function CharInfo (props) {
     const content = !(loading || error || !char) ? <View char={char} /> : null;
 
     return (
-        <div className="char__info">
-            {skeleton}
-            {errorMessage}
-            {spinner}
-            {content}
+        <div className="char__info-wrapper">
+            <div className="char__info">
+                {skeleton}
+                {errorMessage}
+                {spinner}
+                {content}
+            </div>
+            <CharFindForm/>
+
         </div>
+
     )
     
 }
