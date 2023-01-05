@@ -2,16 +2,14 @@ import { useState, useEffect} from 'react';
 import PropTypes from 'prop-types'; // ES6
 import './charInfo.scss';
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/spinner';
-import ErrorMessage from '../errorMessage/errorMessage';
-import Skeleton from '../skeleton/Skeleton';
 import CharFindForm from '../CharFindForm/CharFindForm';
+import setContent from '../../utils/setContent';
 
 
 function CharInfo (props) {
     const [char, setChar] = useState(null);
 
-    const {loading,error,getCharacter} = useMarvelService();
+    const {getCharacter, process, setProcess} = useMarvelService();
 
     const updateChar = () => {
         const {charId} = props;
@@ -20,6 +18,7 @@ function CharInfo (props) {
         }
         getCharacter(charId)
         .then(onCharLoaded)
+        .then(() => setProcess('confirmed'))
     }
 
     useEffect(() => {
@@ -34,20 +33,11 @@ function CharInfo (props) {
         setChar(char);
     }
 
-
-
-    const skeleton =  char || loading || error ? null : <Skeleton/>;
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error || !char) ? <View char={char} /> : null;
-
     return (
         <div className="char__info-wrapper">
             <div className="char__info">
-                {skeleton}
-                {errorMessage}
-                {spinner}
-                {content}
+
+                {setContent(process, View, char)}
             </div>
             <CharFindForm/>
 
@@ -57,8 +47,8 @@ function CharInfo (props) {
     
 }
 
-const View = ({char}) => {
-    const {name, description, thumbnail,homepage,wiki, comics} = char;
+const View = ({data}) => {
+    const {name, description, thumbnail,homepage,wiki, comics} = data;
     const reg = /image_not_available/g;
 
     return (
