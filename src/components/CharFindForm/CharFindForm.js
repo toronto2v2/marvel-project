@@ -23,8 +23,6 @@ const CharFindForm = () => {
         setChar(char)
     }   
 
-
-
     const notFound = Array.isArray(char) && char.length === 0  ? <div className="charNotFound">The character was not found. Check the name and try again</div> : null;
     const firsView = !char || char.length === 0? <div className="validation__wrapper-error">
                                 <ErrorMessage name="charName" component='div' className="errorValidate"/>

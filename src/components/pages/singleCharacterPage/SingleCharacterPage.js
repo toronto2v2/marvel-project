@@ -1,4 +1,5 @@
 import './SingleCharacterPage.css'
+import { Helmet } from 'react-helmet';
 import AppBanner from "../../appBanner/AppBanner";
 import Spinner from '../../spinner/spinner';
 import { useParams } from 'react-router-dom';
@@ -46,6 +47,13 @@ const View = ({char}) => {
     const {name,description,thumbnail} = char;
     return(
         <div className="single-char">
+        <Helmet>
+            <meta
+                name="description"
+                content={`Information about ${name}`}
+                />
+            <title>{name}</title>
+        </Helmet>
         <img src={thumbnail} alt={name} className="single-char__img"/>
         <div className="single-char__info">
             <h2 className="single-char__name">{name}</h2>
